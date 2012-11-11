@@ -1634,6 +1634,9 @@ au BufNewFile,BufRead *.sass			setf sass
 " Sather
 au BufNewFile,BufRead *.sa			setf sather
 
+" Scala(add)
+au BufNewFile,BufRead *.scala       setf scala
+
 " Scilab
 au BufNewFile,BufRead *.sci,*.sce		setf scilab
 
