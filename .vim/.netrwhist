@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/Users/darima/append_apache_conf'
+let g:netrw_dirhist_2='/Users/darima/.vim'
+let g:netrw_dirhist_3='/Users/darima/Programs/exercise/.git'

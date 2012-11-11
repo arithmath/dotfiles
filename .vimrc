@@ -1,0 +1,9 @@
+set autoindent
+set expandtab
+set number
+set showmatch
+set tabstop=4
+syntax on
+"colorscheme zenburn
+"colorscheme pyte
+colorscheme desert
