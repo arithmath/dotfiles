@@ -71,14 +71,14 @@ precmd(){
 
             # ファイルの更新状況によって色を変える
             case $GIT_TRACKSTATUS in
-                $GIT_TRACKSTATUS_ALL_COMMITED          ) GIT_BRANCH_COLOR="blue" ;;
+                $GIT_TRACKSTATUS_ALL_COMMITED          ) GIT_BRANCH_COLOR="cyan" ;;
                 $GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE  ) GIT_BRANCH_COLOR="green" ;;
                 $GIT_TRACKSTATUS_ALL_STAGING_CHANGED   ) GIT_BRANCH_COLOR="yellow" ;;
                 $GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE ) GIT_BRANCH_COLOR="red" ;;
             esac
 
             # RPROMPTに、現在のブランチ名に色づけをして表示
-            RPROMPT="%S%F{$GIT_BRANCH_COLOR}$GIT_CURRENT_BRANCH%f%s"
+            RPROMPT="%S%F{$GIT_BRANCH_COLOR}[$GIT_CURRENT_BRANCH]%f%s"
     fi
 
     # 毎回実行するコマンド
