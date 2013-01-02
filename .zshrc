@@ -17,26 +17,25 @@ precmd(){
         then
             # その1. git status -sで、ファイルの更新状態を取得する
             ############################################################
-            GIT_STATUS_SHORT=`git status -s`
-            GIT_STATUS_SHORT_PREFIXES=`echo $GIT_STATUS_SHORT | cut -c -2`
+            GIT_STATUS=`git status`
 
             # その1-1. gitの管理下にないファイルがあるかどうかを確認
-            TEMP=`echo $GIT_STATUS_SHORT_PREFIXES | grep '?'`
+            echo $GIT_STATUS | grep '^# Untracked files:$' 1>/dev/null
             if [ $? -eq 0 ]
                 then GIT_EXISTS_UNTRACKED_FILE=$TRUE
                 else GIT_EXISTS_UNTRACKED_FILE=$FALSE
             fi
 
             # その1-2. gitの管理下にあって、修正されたファイルがあるかどうかを確認
-            TEMP=`echo $GIT_STATUS_SHORT_PREFIXES | cut -c 2 | grep -v ' '`
-            if [ $TEMP ]
+            echo $GIT_STATUS | grep '^# Changes not staged for commit:$' 1>/dev/null
+            if [ $? -eq 0 ]
                 then GIT_EXISTS_MODIFIED_FILE=$TRUE
                 else GIT_EXISTS_MODIFIED_FILE=$FALSE
             fi
 
             # その1-3. gitの管理下にあって、ステージングまでされたファイルがあるかどうかを確認
-            TEMP=`echo $GIT_STATUS_SHORT_PREFIXES | cut -c 1 | grep -v ' '`
-            if [ $TEMP ]
+            echo $GIT_STATUS | grep '^# Changes to be committed:$' 1>/dev/null
+            if [ $? -eq 0 ]
                 then GIT_EXISTS_STAGING_FILE=$TRUE
                 else GIT_EXISTS_STAGING_FILE=$FALSE
             fi
