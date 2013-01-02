@@ -84,6 +84,7 @@ precmd(){
     ############################################################
     if [ $IN_GIT_REPOSITORY -eq $TRUE ]
         then
+            echo # 最初に改行する
             echoWithFormat "git status" 33 4
             if [ $GIT_TRACKSTATUS -eq $GIT_TRACKSTATUS_ALL_COMMITED ]
                 then
