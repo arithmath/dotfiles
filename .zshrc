@@ -64,20 +64,20 @@ precmd(){
             # その3. 現在のブランチ名を取得
             ############################################################
             GIT_CURRENT_BRANCH=`git branch | grep '*' | cut -c 3-`
+    fi
 
-            # その4. RPOMPTに現在のブランチを表示
-            ############################################################
-
+    if [ $IN_GIT_REPOSITORY -eq $TRUE ]
+        then
             # ファイルの更新状況によって色を変える
             case $GIT_TRACKSTATUS in
-                $GIT_TRACKSTATUS_ALL_COMMITED          ) GIT_BRANCH_COLOR="cyan" ;;
-                $GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE  ) GIT_BRANCH_COLOR="green" ;;
-                $GIT_TRACKSTATUS_ALL_STAGING_CHANGED   ) GIT_BRANCH_COLOR="yellow" ;;
-                $GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE ) GIT_BRANCH_COLOR="red" ;;
+                $GIT_TRACKSTATUS_ALL_COMMITED          ) GIT_BRANCH_COLOR="cyan";;
+                $GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE  ) GIT_BRANCH_COLOR="green";;
+                $GIT_TRACKSTATUS_ALL_STAGING_CHANGED   ) GIT_BRANCH_COLOR="yellow";;
+                $GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE ) GIT_BRANCH_COLOR="red";;
             esac
-
-            # RPROMPTに、現在のブランチ名に色づけをして表示
             RPROMPT="%S%F{$GIT_BRANCH_COLOR}[$GIT_CURRENT_BRANCH]%f%s"
+        else
+            RPROMPT=""
     fi
 
     # 毎回実行するコマンド
@@ -119,6 +119,9 @@ TERM=xterm-256color
 setopt auto_cd
 
 alias ls='ls -G'
+
+# cdする旅にlsするように設定
+chpwd(){ls}
 
 # 色をつけたりフォーマットを付与して出力します
 # 第1引数に出力する文字を指定します
