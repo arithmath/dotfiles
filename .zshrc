@@ -75,7 +75,7 @@ precmd(){
                 $GIT_TRACKSTATUS_ALL_STAGING_CHANGED   ) GIT_BRANCH_COLOR="yellow";;
                 $GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE ) GIT_BRANCH_COLOR="red";;
             esac
-            RPROMPT="%S%F{$GIT_BRANCH_COLOR}[$GIT_CURRENT_BRANCH]%f%s"
+            RPROMPT="[%F{$GIT_BRANCH_COLOR}$GIT_CURRENT_BRANCH%f]"
         else
             RPROMPT=""
     fi
@@ -95,7 +95,7 @@ precmd(){
     fi
 }
 
-PATH="$PATH":/Users/darima/bin:/usr/bin/symfony:/usr/local/mysql/bin:/usr/bin/scala/bin:
+PATH=/usr/local/bin:"$PATH":/Users/darima/bin:/usr/bin/symfony:/usr/local/mysql/bin:/usr/bin/scala/bin:
 export LANG=ja_JP.UTF-8
 
 setopt print_eight_bit
@@ -109,7 +109,7 @@ autoload colors
 colors
 # gitのブランチを表示する文字列を生成
 PROMPT="
-%F{blue}%~%f
+%F{033}%~%f
 %F{red}%n%f@%F{yellow}%M%f$ "
 
 # 256色を有効に
@@ -162,5 +162,21 @@ echoWithFormat(){
         then STYLE=$3
         else STYLE="0"
     fi
+    case $COLOR in
+        "black"   ) COLOR="30";;
+        "red"     ) COLOR="31";;
+        "green"   ) COLOR="32";;
+        "yellow"  ) COLOR="33";;
+        "blue"    ) COLOR="34";;
+        "magenta" ) COLOR="35";;
+        "cyan"    ) COLOR="36";;
+        "white"   ) COLOR="37";;
+    esac
+
     echo "\033[${STYLE};${COLOR}m${STR}\033[0;39m"
+}
+
+tips()
+{
+
 }
