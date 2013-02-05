@@ -90,7 +90,7 @@ precmd(){
     for TEMP in {1..`tput cols`};
         do SEPARATOR="${SEPARATOR} "
     done;
-    print -nP "%U%F{220}${SEPARATOR}%f%u\n\n"
+    print -nP "%U%F{141}${SEPARATOR}%f%u\n\n"
 
     # tips
     ARG=$RANDOM
@@ -140,7 +140,7 @@ setopt auto_cd
 
 # cdする旅にlsするように設定
 chpwd(){
-    autoDispTitle "files"
+    #autoDispTitle "files"
     ls
     echo # 改行
 }
