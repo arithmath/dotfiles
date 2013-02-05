@@ -1,0 +1,4 @@
+[tar] ファイル作成(%F{220}C%freate1) : tar -%F{220}c%ff %F{160}出力tarファイル%f %F{075}入力ファイル・ディレクトリ%f
+[tar] ファイル展開(E%F{220}x%ftract) : tar -%F{220}x%ff %F{075}入力tarファイル%f
+[tar] ファイルの一覧表示(Lis%F{220}t%f) : tar -%F{220}t%ff %F{075}入力tarファイル%f
+[tar] tarに追加 : tar -r

@@ -3,7 +3,6 @@ FALSE=0
 
 precmd(){
     psvar=()
-
     # gitの管理下にあるかどうかを確認
     `git branch > /dev/null 2>&1`
     if [ $? -eq 0 ]
@@ -85,9 +84,27 @@ precmd(){
 
     # 毎回実行するコマンド
     ############################################################
+
+    # 区切り線
+    SEPARATOR=""
+    for TEMP in {1..`tput cols`};
+        do SEPARATOR="${SEPARATOR} "
+    done;
+    print -nP "%U%F{220}${SEPARATOR}%f%u\n\n"
+
+    # tips
+    ARG=$RANDOM
+    TIPS=`tips $ARG`
+    if [ $TIPS ]
+        then
+            autoDispTitle "tips"
+            print -nP "$TIPS\n"
+            echo # 最後に改行する
+    fi
+
+    # git status
     if [ $IN_GIT_REPOSITORY -eq $TRUE ]
         then
-            echo # 最初に改行する
             autoDispTitle "git status"
             if [ $GIT_TRACKSTATUS -eq $GIT_TRACKSTATUS_ALL_COMMITED ]
                 then
@@ -125,6 +142,7 @@ setopt auto_cd
 chpwd(){
     autoDispTitle "files"
     ls
+    echo # 改行
 }
 
 # 色をつけたりフォーマットを付与して出力します
@@ -204,9 +222,32 @@ autoDispTitle(){
     print -nP "%U%F{$COLOR}/ $STR %f%u\n"
 }
 
-tips()
-{
+tips(){
+    if [ $# -gt 0 ]
+        then NUM=$1
+        else NUM=$RANDOM
+    fi
 
+    ALL_LINES=()
+    COUNT=0;
+
+    find $ZDOTDIR/tips -type f -name "*.txt" | while read FILE
+    do
+        while read LINE;
+        do
+            ALL_LINES+=($LINE)
+            COUNT=`expr $COUNT + 1`
+        done < $FILE
+    done
+
+    if [ $COUNT -gt 0 ];
+    then
+        ID=`expr $NUM % $COUNT`
+        ID=`expr $ID + 1`
+        echo $ALL_LINES[$ID]
+    else
+        echo ""
+    fi
 }
 
 # 環境固有の設定の読み込み

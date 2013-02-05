@@ -1,0 +1,1 @@
+[git] 直前のコミットメッセージを修正 : git commit %F{220}--amend%f
