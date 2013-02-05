@@ -1,7 +1,6 @@
 TRUE=1
 FALSE=0
 
-
 precmd(){
     psvar=()
 
@@ -68,12 +67,16 @@ precmd(){
 
     if [ $IN_GIT_REPOSITORY -eq $TRUE ]
         then
+            GIT_STATUS_COLOR_RED="009"
+            GIT_STATUS_COLOR_YELLOW="226"
+            GIT_STATUS_COLOR_GREEN="118"
+            GIT_STATUS_COLOR_BLUE="039"
             # ファイルの更新状況によって色を変える
             case $GIT_TRACKSTATUS in
-                $GIT_TRACKSTATUS_ALL_COMMITED          ) GIT_BRANCH_COLOR="cyan";;
-                $GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE  ) GIT_BRANCH_COLOR="green";;
-                $GIT_TRACKSTATUS_ALL_STAGING_CHANGED   ) GIT_BRANCH_COLOR="yellow";;
-                $GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE ) GIT_BRANCH_COLOR="red";;
+                $GIT_TRACKSTATUS_ALL_COMMITED          ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_BLUE;;
+                $GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE  ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_GREEN;;
+                $GIT_TRACKSTATUS_ALL_STAGING_CHANGED   ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_YELLOW;;
+                $GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_RED;;
             esac
             RPROMPT="[%F{$GIT_BRANCH_COLOR}$GIT_CURRENT_BRANCH%f]"
         else
@@ -85,10 +88,10 @@ precmd(){
     if [ $IN_GIT_REPOSITORY -eq $TRUE ]
         then
             echo # 最初に改行する
-            echoWithFormat "git status" 33 4
+            autoDispTitle "git status"
             if [ $GIT_TRACKSTATUS -eq $GIT_TRACKSTATUS_ALL_COMMITED ]
                 then
-                    echoWithFormat "  全てコミット済みです" 31
+                    print -nP "%F{144}  全てコミット済みです%f\n"
                 else
                     git status -s
             fi
@@ -109,8 +112,8 @@ autoload colors
 colors
 # gitのブランチを表示する文字列を生成
 PROMPT="
-%F{033}%~%f
-%F{red}%n%f@%F{yellow}%M%f$ "
+%F{111}%~%f
+%F{240}%n%f@%F{228}%M%f$ "
 
 # 256色を有効に
 TERM=xterm-256color
@@ -118,10 +121,11 @@ TERM=xterm-256color
 # ディレクトリ名だけでディレクトリ移動
 setopt auto_cd
 
-alias ls='ls -G'
-
 # cdする旅にlsするように設定
-chpwd(){ls}
+chpwd(){
+    autoDispTitle "files"
+    ls
+}
 
 # 色をつけたりフォーマットを付与して出力します
 # 第1引数に出力する文字を指定します
@@ -176,7 +180,34 @@ echoWithFormat(){
     echo "\033[${STYLE};${COLOR}m${STR}\033[0;39m"
 }
 
+colorEcho(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    if [ $# -gt 1 ]
+        then COLOR=$2
+        else return 2
+    fi
+    print -nP "%F{${COLOR}}${STR}%f"
+}
+
+autoDispTitle(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    if [ $# -gt 1 ]
+        then COLOR=$2
+        else COLOR="179" # デフォルトカラー
+    fi
+    print -nP "%U%F{$COLOR}/ $STR %f%u\n"
+}
+
 tips()
 {
 
 }
+
+# 環境固有の設定の読み込み
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
