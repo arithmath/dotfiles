@@ -1,5 +1,6 @@
 TRUE=1
 FALSE=0
+CHPWD=$TRUE
 
 precmd(){
     psvar=()
@@ -87,18 +88,19 @@ precmd(){
 
     # 区切り線
     SEPARATOR=""
-    for TEMP in {1..`tput cols`};
+    TERMINAL_WIDTH=`tput cols`
+    SEPARATOR_WIDTH=`expr $TERMINAL_WIDTH - 4`
+    for TEMP in {1..$SEPARATOR_WIDTH};
         do SEPARATOR="${SEPARATOR} "
     done;
-    print -nP "%U%F{141}${SEPARATOR}%f%u\n\n"
+    print -nP "  %U%F{141}${SEPARATOR}%f%u  \n\n"
 
-    # tips
-    ARG=$RANDOM
-    TIPS=`tips $ARG`
-    if [ $TIPS ]
+    # ls
+    if [ $CHPWD -eq $TRUE ]
         then
-            autoDispTitle "tips"
-            print -nP "$TIPS\n"
+            CHPWD=$FALSE
+            autoDispTitle "files"
+            ls
             echo # 最後に改行する
     fi
 
@@ -112,7 +114,18 @@ precmd(){
                 else
                     git status -s
             fi
+            echo # 最後に改行する
     fi
+
+    # tips
+    ARG=$RANDOM
+    TIPS=`tips $ARG`
+    if [ $TIPS ]
+        then
+            autoDispTitle "tips"
+            print -nP "$TIPS\n"
+    fi
+
 }
 
 PATH=/usr/local/bin:"$PATH":/Users/darima/bin:/usr/bin/symfony:/usr/local/mysql/bin:/usr/bin/scala/bin:
@@ -140,9 +153,7 @@ setopt auto_cd
 
 # cdする旅にlsするように設定
 chpwd(){
-    #autoDispTitle "files"
-    ls
-    echo # 改行
+    CHPWD=$TRUE
 }
 
 # 色をつけたりフォーマットを付与して出力します
@@ -251,4 +262,4 @@ tips(){
 }
 
 # 環境固有の設定の読み込み
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+[ -f $ZDOTDIR/.zshrc.local ] && source $ZDOTDIR/.zshrc.local
