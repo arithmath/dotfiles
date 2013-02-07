@@ -91,9 +91,9 @@ precmd(){
     TERMINAL_WIDTH=`tput cols`
     SEPARATOR_WIDTH=`expr $TERMINAL_WIDTH - 4`
     for TEMP in {1..$SEPARATOR_WIDTH};
-        do SEPARATOR="${SEPARATOR} "
+        do SEPARATOR="${SEPARATOR}-"
     done;
-    print -nP "  %U%F{141}${SEPARATOR}%f%u  \n\n"
+    clecho "  $SEPARATOR  " 141
 
     # ls
     if [ $CHPWD -eq $TRUE ]
@@ -144,10 +144,11 @@ colors
 #PROMPT="
 #%F{111}%~%f
 #%F{240}%n%f@%F{228}%M%f$ "
+#PROMPT=`echo "%{\e[38;05;111m%} {hogehoge} %{\e[m%}"`
+#    echo "%{\e[38;05;${COLOR}m%}${STR}%{\e[m%}"
 PROMPT="
-`clecho %~ 111`
-`clecho %n 240`@`clecho %M 228`$ "
-
+`clecho_prompt %~ 111`
+`clecho_prompt %n 240`@`clecho_prompt %M 228`$ "
 # 256色を有効に
 TERM=xterm-256color
 
@@ -221,6 +222,26 @@ clecho(){
         then COLOR=$2
         else return 2
     fi
+
+    # カラー表示する場合は "\e[38;05;色番号m"と"\e[m"で囲めば良い。
+    # また、上記のエスケープシーケンスを%{と%}で囲まないと、PROMPTで使用したときにRPROMPTがずれる。
+    # そのため、実際には"%{\e[38;05;色番号m%}"と"%{\e[m%}"で囲む
+    echo "\e[38;05;${COLOR}m${STR}\e[m"
+}
+
+clecho_prompt(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    if [ $# -gt 1 ]
+        then COLOR=$2
+        else return 2
+    fi
+
+    # カラー表示する場合は "\e[38;05;色番号m"と"\e[m"で囲めば良い。
+    # また、上記のエスケープシーケンスを%{と%}で囲まないと、PROMPTで使用したときにRPROMPTがずれる。
+    # そのため、実際には"%{\e[38;05;色番号m%}"と"%{\e[m%}"で囲む
     echo "%{\e[38;05;${COLOR}m%}${STR}%{\e[m%}"
 }
 
