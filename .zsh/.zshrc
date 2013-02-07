@@ -141,9 +141,12 @@ compinit
 autoload colors
 colors
 # gitのブランチを表示する文字列を生成
+#PROMPT="
+#%F{111}%~%f
+#%F{240}%n%f@%F{228}%M%f$ "
 PROMPT="
-%F{111}%~%f
-%F{240}%n%f@%F{228}%M%f$ "
+`clecho %~ 111`
+`clecho %n 240`@`clecho %M 228`$ "
 
 # 256色を有効に
 TERM=xterm-256color
@@ -209,7 +212,19 @@ echoWithFormat(){
     echo "\033[${STYLE};${COLOR}m${STR}\033[0;39m"
 }
 
-colorEcho(){
+clecho(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    if [ $# -gt 1 ]
+        then COLOR=$2
+        else return 2
+    fi
+    echo "%{\e[38;05;${COLOR}m%}${STR}%{\e[m%}"
+}
+
+clprint(){
     if [ $# -gt 0 ]
         then STR=$1
         else return 1
