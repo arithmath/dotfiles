@@ -1,0 +1,56 @@
+# 強調表示
+bdecho(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    echo "\e[1;m${STR}\e[m"
+}
+
+# 下線表示
+ulecho(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    echo "\e[4;m${STR}\e[m"
+}
+
+# 反転表示
+rvecho(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    echo "\e[7;m${STR}\e[m"
+}
+
+# カラー表示
+clecho(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    if [ $# -gt 1 ]
+        then COLOR=$2
+        else return 2
+    fi
+
+    # カラー表示する場合は "\e[38;05;色番号m"と"\e[m"で囲めば良い。
+    echo "\e[38;05;${COLOR}m${STR}\e[m"
+}
+
+# カラー表示(プロンプト)
+clecho_prompt(){
+    if [ $# -gt 0 ]
+        then STR=$1
+        else return 1
+    fi
+    if [ $# -gt 1 ]
+        then COLOR=$2
+        else return 2
+    fi
+
+    # エスケープシーケンスを%{と%}で囲まないと表示がずれる
+    echo "%{\e[38;05;${COLOR}m%}${STR}%{\e[m%}"
+}

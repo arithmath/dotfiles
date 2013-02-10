@@ -1,2 +1,4 @@
+PATH=/usr/local/bin:"$PATH":/Users/darima/bin:/usr/bin/symfony:/usr/local/mysql/bin:/usr/bin/scala/bin:
+
 # lsをカラー表示
 alias ls='ls -G'

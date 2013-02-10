@@ -1,0 +1,116 @@
+available_git(){
+    which git > /dev/null
+    if [ $? -eq 0 ]
+        then return $TRUE
+        else return $FALSE
+    fi
+}
+
+in_git_repository()
+{
+    available_git
+    if [ $? -eq $FALSE ]
+        then return $FALSE
+    fi
+
+    `git branch > /dev/null 2>&1`
+    if [ $? -eq 0 ]
+        then return $TRUE
+        else return $FALSE
+    fi
+}
+
+git_status_string(){
+    in_git_repository
+    if [ $? -eq $TRUE ]
+        then git status
+        else echo ""
+    fi
+}
+
+git_current_branch(){
+    in_git_repository
+    if [ $? -eq $FALSE ]
+        then return $FALSE
+    fi
+    git branch | grep '*' | cut -c 3-
+    return $TRUE;
+}
+
+# gitの管理下にないファイルがあるかどうかを確認
+git_exists_untracked_files(){
+    in_git_repository
+    if [ $? -eq $FALSE ]
+        then return $FALSE
+    fi
+
+    GIT_STATUS=`git_status_string`
+    echo $GIT_STATUS | grep '^# Untracked files:$' 1>/dev/null
+    if [ $? -eq 0 ]
+        then return $TRUE
+        else return $FALSE
+    fi
+}
+
+# gitの管理下にあって、修正されたファイルがあるかどうかを確認
+git_exists_modifying_files(){
+    in_git_repository
+    if [ $? -eq $FALSE ]
+        then return $FALSE
+    fi
+
+    GIT_STATUS=`git_status_string`
+    echo $GIT_STATUS | grep '^# Changes not staged for commit:$' 1>/dev/null
+    if [ $? -eq 0 ]
+        then return $TRUE
+        else return $FALSE
+    fi
+}
+
+git_exists_staging_files(){
+    in_git_repository
+    if [ $? -eq $FALSE ]
+        then return $FALSE
+    fi
+
+    GIT_STATUS=`git_status_string`
+    echo $GIT_STATUS | grep '^# Changes to be committed:$' 1>/dev/null
+    if [ $? -eq 0 ]
+        then return $TRUE
+        else return $FALSE
+    fi
+}
+
+# git管理ファイルの追跡状況を調べる
+# 追跡状況を示す定数を定義
+GIT_TRACKSTATUS_ALL_COMMITED=0          # すべてコミットされている
+GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE=1  # すべてステージングされて、ステージング後変更がない
+GIT_TRACKSTATUS_ALL_STAGING_CHANGED=2   # すべてステージングされているが、ステージング後変更がある
+GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE=3 # 未追跡ファイルが存在する
+GIT_TRACKSTATUS_NOT_IN_GIT_REPOSITORY=9 # gitリポジトリ内にいない
+git_check(){
+    in_git_repository
+    if [ $? -eq $FALSE ]
+        then return $GIT_TRACKSTATUS_NOT_IN_GIT_REPOSITORY
+    fi
+
+    # GIT_TRACKSTATUSに追跡状況を代入
+    GIT_TRACKSTATUS=$GIT_TRACKSTATUS_ALL_COMMITED
+
+    git_exists_staging_files
+    if [ $? -eq $TRUE ]
+        then GIT_TRACKSTATUS=$GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE
+    fi
+
+    git_exists_modifying_files
+    if [ $? -eq $TRUE ]
+        then GIT_TRACKSTATUS=$GIT_TRACKSTATUS_ALL_STAGING_CHANGED
+    fi
+
+    git_exists_untracked_files
+    if [ $? -eq $TRUE ]
+        then GIT_TRACKSTATUS=$GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE
+    fi
+
+    return $GIT_TRACKSTATUS
+}
