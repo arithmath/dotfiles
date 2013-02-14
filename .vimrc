@@ -6,7 +6,7 @@ set tabstop=4
 set hlsearch    " 検索語を強調表示 
 set incsearch   " インクリメンタルサーチ(1語入力するたびに検索)
 syntax on
-colorscheme zenburn
+colorscheme modified_zenburn
 "colorscheme pyte
 "colorscheme desert
 
