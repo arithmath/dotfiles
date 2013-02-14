@@ -14,4 +14,3 @@ do
     rm $dist_path 2>/dev/null
     ln -s "$source_path" ~/
 done
-# ln -s $VIMRC_PATH 
