@@ -14,11 +14,6 @@ colorscheme modified_zenburn
 set list
 set listchars=tab:/_,trail:_,eol:↲,extends:»,precedes:«,nbsp:.
 
-"タブに色づけ
-highlight TabString ctermbg=gray guibg=gray
-au BufWinEnter * let w:m2 = matchadd("TabString", '\t')
-au WinEnter * let w:m2 = matchadd("TabString", '\t')
-
 " -------------------------------------------
 " NeoBundleの設定
 " ※ https://github.com/Shougo/neobundle.vim
