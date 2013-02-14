@@ -50,9 +50,10 @@ precmd(){
     TERMINAL_WIDTH=`tput cols`
     SEPARATOR_WIDTH=`expr $TERMINAL_WIDTH - 4`
     for TEMP in {1..$SEPARATOR_WIDTH};
-        do SEPARATOR="${SEPARATOR} "
+        do SEPARATOR="${SEPARATOR}."
     done;
-    clecho "  `ulecho $SEPARATOR`  \n" 141
+    echo # 改行
+    clecho "  $SEPARATOR  \n" 141
 
     # ls
     if [ $CHPWD -eq $TRUE ]
@@ -123,7 +124,8 @@ autoDispTitle(){
         then COLOR=$2
         else COLOR="179" # デフォルトカラー
     fi
-    print -nP "%U%F{$COLOR}/ $STR %f%u\n"
+    UNDERLINED_STR="`ulecho \"/ $STR\"`"
+    clecho $UNDERLINED_STR $COLOR
 }
 
 tips(){

@@ -1,5 +1,5 @@
 available_git(){
-    which git > /dev/null
+    which git > /dev/null 2>&1
     if [ $? -eq 0 ]
         then return $TRUE
         else return $FALSE
