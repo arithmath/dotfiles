@@ -1,5 +1,4 @@
 script_dir=$(cd $(dirname $0); pwd)
-echo $script_dir
 
 # 設置ファイルの定義
 targets[0]=".vimrc"
