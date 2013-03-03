@@ -1,6 +1,9 @@
-TRUE=1
-FALSE=0
-CHPWD=$TRUE
+true=1
+false=0
+chpwd=$true
+enable_auto_tips=$true
+enable_auto_git_status=$true
+enable_rprompt=$true
 
 # 設定ファイルロード用
 zshload(){
@@ -21,25 +24,28 @@ zshload .zshrc.git
 precmd(){
     psvar=()
 
-    git_check
-    GIT_CHECK_RESULT=$?
-    if [ $GIT_CHECK_RESULT -ne 9 ]
+    if [ $enable_rprompt -eq $true ]
         then
-            GIT_STATUS_COLOR_RED="009"
-            GIT_STATUS_COLOR_YELLOW="226"
-            GIT_STATUS_COLOR_GREEN="118"
-            GIT_STATUS_COLOR_BLUE="039"
-            # ファイルの更新状況によって色を変える
-            case $GIT_CHECK_RESULT in
-                $GIT_TRACKSTATUS_ALL_COMMITED          ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_BLUE;;
-                $GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE  ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_GREEN;;
-                $GIT_TRACKSTATUS_ALL_STAGING_CHANGED   ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_YELLOW;;
-                $GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_RED;;
-            esac
-            GIT_CURRENT_BRANCH=`git_current_branch`
-            RPROMPT="[`clecho_prompt $GIT_CURRENT_BRANCH $GIT_BRANCH_COLOR`]"
-        else
-            RPROMPT=""
+            git_check
+            GIT_CHECK_RESULT=$?
+            if [ $GIT_CHECK_RESULT -ne 9 ]
+                then
+                    GIT_STATUS_COLOR_RED="009"
+                    GIT_STATUS_COLOR_YELLOW="226"
+                    GIT_STATUS_COLOR_GREEN="118"
+                    GIT_STATUS_COLOR_BLUE="039"
+                    # ファイルの更新状況によって色を変える
+                    case $GIT_CHECK_RESULT in
+                        $GIT_TRACKSTATUS_ALL_COMMITED          ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_BLUE;;
+                        $GIT_TRACKSTATUS_ALL_STAGING_NOCHANGE  ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_GREEN;;
+                        $GIT_TRACKSTATUS_ALL_STAGING_CHANGED   ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_YELLOW;;
+                        $GIT_TRACKSTATUS_EXISTS_UNTRACKED_FILE ) GIT_BRANCH_COLOR=$GIT_STATUS_COLOR_RED;;
+                    esac
+                    GIT_CURRENT_BRANCH=`git_current_branch`
+                    RPROMPT="[`clecho_prompt $GIT_CURRENT_BRANCH $GIT_BRANCH_COLOR`]"
+                else
+                    RPROMPT=""
+            fi
     fi
 
     # 毎回実行するコマンド
@@ -56,36 +62,41 @@ precmd(){
     clecho "  $SEPARATOR  \n" 141
 
     # ls
-    if [ $CHPWD -eq $TRUE ]
+    if [ $chpwd -eq $true ]
         then
-            CHPWD=$FALSE
-            autoDispTitle "files"
+            chpwd=$false
+            auto_disp_title "files"
             ls
             echo # 最後に改行する
     fi
 
     # git status
-    if [ $GIT_CHECK_RESULT -ne $GIT_TRACKSTATUS_NOT_IN_GIT_REPOSITORY ]
+    if [ $enable_auto_git_status -eq $true ]
         then
-            autoDispTitle "git status"
-            if [ $GIT_CHECK_RESULT -eq $GIT_TRACKSTATUS_ALL_COMMITED ]
+            if [ $GIT_CHECK_RESULT -ne $GIT_TRACKSTATUS_NOT_IN_GIT_REPOSITORY ]
                 then
-                    clecho "全てコミット済みです" 144
-                else
-                    git status -s
+                    auto_disp_title "git status"
+                    if [ $GIT_CHECK_RESULT -eq $GIT_TRACKSTATUS_ALL_COMMITED ]
+                        then
+                            clecho "全てコミット済みです" 144
+                        else
+                            git status -s
+                    fi
+                    echo # 最後に改行する
             fi
-            echo # 最後に改行する
     fi
 
     # tips
-    ARG=$RANDOM
-    TIPS=`tips $ARG`
-    if [ $TIPS ]
+    if [ $enable_auto_tips -eq $true ]
         then
-            autoDispTitle "tips"
-            print -nP "$TIPS\n"
+            ARG=$RANDOM
+            TIPS=`tips $ARG`
+            if [ $TIPS ]
+                then
+                    auto_disp_title "tips"
+                    print -nP "$TIPS\n"
+            fi
     fi
-
 }
 
 export LANG=ja_JP.UTF-8
@@ -112,10 +123,10 @@ setopt auto_cd
 
 # cdする旅にlsするように設定
 chpwd(){
-    CHPWD=$TRUE
+    chpwd=$true
 }
 
-autoDispTitle(){
+auto_disp_title(){
     if [ $# -gt 0 ]
         then STR=$1
         else return 1
