@@ -33,6 +33,9 @@ NeoBundle 'Shougo/vimproc'
 " vim上で編集中のプログラムを実行する
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 
+" minibufexpl
+NeoBundle 'fholgado/minibufexpl.vim'
+
 filetype on
 
 "
@@ -52,3 +55,11 @@ endif
 " NeoBundleの設定ここまで
 " -------------------------------------------
 
+
+let g:miniBufExplMapWindowNavVim=1
+let g:miniBufExplSplitBelow=0
+let g:miniBufExplMapWindowNavArrows=1
+let g:miniBufExplMapCTabSwitchBufs=1
+let g:miniBufExplModSelTarget=1
+let g:miniBufExplSplitToEdge=1
+let g:miniBufExplMaxSize=10
