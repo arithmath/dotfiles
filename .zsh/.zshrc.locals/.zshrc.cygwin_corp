@@ -1,5 +1,5 @@
 # lsをカラー表示
 alias ls='ls --color'
-enable_auto_git_status=$FALSE
-enable_auto_tips=$FALSE
-enable_rprompt=$FALSE
+enable_auto_git_status=$false
+enable_auto_tips=$false
+enable_rprompt=$false
