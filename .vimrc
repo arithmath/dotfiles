@@ -55,6 +55,14 @@ endif
 " NeoBundleの設定ここまで
 " -------------------------------------------
 
+noremap <Space>n : bn<CR>
+noremap <Space>p : bp<CR>
+noremap <Space>q : bw<CR>
+
+nnoremap <silent> <Space>j 5<C-w>+
+nnoremap <silent> <Space>k 5<C-w>-
+nnoremap <silent> <Space>h 10<C-w><
+nnoremap <silent> <Space>l 10<C-w>>
 
 let g:miniBufExplMapWindowNavVim=1
 let g:miniBufExplSplitBelow=0
