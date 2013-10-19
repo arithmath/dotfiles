@@ -5,6 +5,8 @@ targets[0]=".vimrc"
 targets[1]=".vim"
 targets[2]=".zshenv"
 targets[3]=".zsh"
+targets[4]=".gitconfig"
+targets[5]=".tmux.conf"
 
 for target in "${targets[@]}"
 do

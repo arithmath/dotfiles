@@ -36,6 +36,9 @@ NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 " minibufexpl
 NeoBundle 'fholgado/minibufexpl.vim'
 
+" Unite
+NeoBundle 'Shougo/unite.vim'
+
 filetype on
 
 "
@@ -59,11 +62,6 @@ noremap <Space>n : bn<CR>
 noremap <Space>p : bp<CR>
 noremap <Space>q : bw<CR>
 
-nnoremap <silent> <Space>j 5<C-w>+
-nnoremap <silent> <Space>k 5<C-w>-
-nnoremap <silent> <Space>h 10<C-w><
-nnoremap <silent> <Space>l 10<C-w>>
-
 let g:miniBufExplMapWindowNavVim=1
 let g:miniBufExplSplitBelow=0
 let g:miniBufExplMapWindowNavArrows=1
@@ -71,3 +69,21 @@ let g:miniBufExplMapCTabSwitchBufs=1
 let g:miniBufExplModSelTarget=1
 let g:miniBufExplSplitToEdge=1
 let g:miniBufExplMaxSize=10
+
+" Uniteの設定
+let g:unite_enable_start_insert=1
+nnoremap <silent> <Space>uy :<C-u>Unite history/yank<CR>
+nnoremap <silent> <Space>ub :<C-u>Unite buffer<CR>
+nnoremap <silent> <Space>uf :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> <Space>ur :<C-u>Unite -buffer-name=register register<CR>
+nnoremap <silent> <Space>uu :<C-u>Unite file_mru buffer<CR>
+
+" ウィンドウサイズの変更
+nnoremap <silent> <Space>j 5<C-w>+
+nnoremap <silent> <Space>k 5<C-w>-
+nnoremap <silent> <Space>h 10<C-w><
+nnoremap <silent> <Space>l 10<C-w>>
+
+" ウィンドウ分割
+nnoremap <silent> <Space>s :<C-u>split<CR>
+nnoremap <silent> <Space>v :<C-u>vsplit<CR>
