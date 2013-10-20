@@ -7,6 +7,7 @@ targets[2]=".zshenv"
 targets[3]=".zsh"
 targets[4]=".gitconfig"
 targets[5]=".tmux.conf"
+targets[6]=".misc"
 
 for target in "${targets[@]}"
 do

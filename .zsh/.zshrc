@@ -100,6 +100,7 @@ precmd(){
 }
 
 export LANG=ja_JP.UTF-8
+export PHP_MANUAL=~/.misc/php-chunked-xhtml/
 
 setopt print_eight_bit
 

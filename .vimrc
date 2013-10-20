@@ -39,6 +39,9 @@ NeoBundle 'fholgado/minibufexpl.vim'
 " Unite
 NeoBundle 'Shougo/unite.vim'
 
+" ref
+NeoBundle 'thinca/vim-ref'
+
 filetype on
 
 "
@@ -87,3 +90,6 @@ nnoremap <silent> <Space>l 10<C-w>>
 " ウィンドウ分割
 nnoremap <silent> <Space>s :<C-u>split<CR>
 nnoremap <silent> <Space>v :<C-u>vsplit<CR>
+
+" refの設定
+let g:ref_phpmanual_path = $PHP_MANUAL
