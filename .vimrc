@@ -34,7 +34,8 @@ NeoBundle 'Shougo/vimproc'
 NeoBundle 'git://github.com/thinca/vim-quickrun.git'
 
 " minibufexpl
-NeoBundle 'fholgado/minibufexpl.vim'
+" NeoBundle 'fholgado/minibufexpl.vim'
+NeoBundle 'bling/vim-airline'
 
 " Unite
 NeoBundle 'Shougo/unite.vim'
@@ -61,17 +62,20 @@ endif
 " NeoBundleの設定ここまで
 " -------------------------------------------
 
-noremap <Space>n : bn<CR>
-noremap <Space>p : bp<CR>
+noremap <Space>n : bn!<CR>
+noremap <Space>p : bp!<CR>
 noremap <Space>q : bw<CR>
 
-let g:miniBufExplMapWindowNavVim=1
-let g:miniBufExplSplitBelow=0
-let g:miniBufExplMapWindowNavArrows=1
-let g:miniBufExplMapCTabSwitchBufs=1
-let g:miniBufExplModSelTarget=1
-let g:miniBufExplSplitToEdge=1
-let g:miniBufExplMaxSize=10
+"let g:miniBufExplMapWindowNavVim=1
+"let g:miniBufExplSplitBelow=0
+"let g:miniBufExplMapWindowNavArrows=1
+"let g:miniBufExplMapCTabSwitchBufs=1
+"let g:miniBufExplModSelTarget=1
+"let g:miniBufExplSplitToEdge=1
+"let g:miniBufExplMaxSize=10
+
+" airlineの設定
+let g:airline#extensions#tabline#enabled = 1
 
 " Uniteの設定
 let g:unite_enable_start_insert=1
